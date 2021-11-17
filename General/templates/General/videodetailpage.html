@@ -1,0 +1,86 @@
+{% extends "General/user-profile-base.html" %}
+<!-- ! -->
+{% block content %}
+<script src="https://player.vimeo.com/api/player.js"></script>
+<hr>
+
+<div class=" width_req video_padding">
+    {% if content.Is_free %}
+    <!-- <iframe class="mob_iframe" width="100%" src="{{ content.Link }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+
+        <iframe src="https://player.vimeo.com/video/{{content.Link}}?background=1&title=0&byline=0&portrait=0&sidedock=0" width="720" height="720" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    <h2 class="my-3 mb-5">{{ content.Title }}</h2>
+    <p class="mt-3 text-justify text-secondary">{{ content.Description }}</p>
+    <a href="#" class="like-button mt-5  mb-2">
+
+
+        <div class="blockquote-footer mt-5">
+            <h5>Author</h5> <cite title="Source Title">{{ profile.username }}</cite>
+
+        </div>
+        <a href="/{{ profile.username }}" class="text-info ">Visit Profile
+        <svg class="ml-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16">
+        <path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12zM5.904 10.803L10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707z"/>
+      </svg>
+    </a> {% else %} {% if visitor in content.Owner.My_subscribers.all %}
+        <!-- <iframe class="mob_iframe" width="100%" src="{{ content.Link }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+        
+        <iframe src="https://player.vimeo.com/video/{{content.Link}}?background=1&title=0&byline=0&portrait=0&sidedock=0" width="320" height="260" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        <h2 style="width: 80%;" class="my-3 mb-5">{{ content.Title }}</h2>
+        <p style="width: 80%;" class="mt-3 text-justify text-secondary">{{ content.Description }}</p>
+        <a href="#" class="like-button mt-5  mb-2">
+
+
+            <div class="blockquote-footer mt-5">
+                <h5>Author</h5> <cite title="Source Title">{{ profile.username }}</cite>
+
+            </div>
+            <a href="/{{ profile.username }}" class="text-info ">Visit Profile
+        <svg class="ml-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16">
+        <path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12zM5.904 10.803L10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707z"/>
+      </svg>
+    </a> {% else %} {% ifequal visitor content.Owner.user %}
+    <h5>ss{{content.Link}}</h5>
+            <!-- <iframe class="mob_iframe" width="100%" src="{{ content.Link }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+            <iframe src="https://player.vimeo.com/video/{{content.Link}}?background=1&title=0&byline=0&portrait=0&sidedock=0" width="320" height="260" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            <h2 class="my-3 mb-5">{{ content.Title }}</h2>
+            <p class="text-muted">For Subscribers Only</p>
+            <p class="mt-3 text-justify text-secondary">{{ content.Description }}</p>
+            <a href="#" class="like-button mt-5  mb-2">
+
+
+                <div class="blockquote-footer mt-5">
+                    <h5>Author</h5> <cite title="Source Title">{{ profile.username }}</cite>
+
+                </div>
+                <a href="/{{ profile.username }}" class="text-info ">Visit Profile
+    <svg class="ml-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16">
+    <path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12zM5.904 10.803L10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707z"/>
+  </svg>
+</a> {% else %}
+                <img src="/images/lock.jpg" class="img-fluid mb-3" alt=""> {% endifequal %}{% endif %} {% endif %}
+</div>
+<!-- ! -->
+
+{% endblock content %}
+{% block script %}
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+    $('#myModal').on('shown.bs.modal', function() {
+        $('#myInput').trigger('focus')
+    });
+</script>
+<script>
+    var iframe = document.querySelector('iframe');
+    var player = new Vimeo.Player(iframe);
+
+    player.on('play', function() {
+      console.log('Played the video');
+    });
+
+    player.getVideoTitle().then(function(title) {
+      console.log('title:', title);
+    });
+  </script>
+  
+{% endblock script %}

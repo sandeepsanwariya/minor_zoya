@@ -1,0 +1,160 @@
+ {% extends "Dashboard/Dashboard-base.html" %} {% load static %}
+<!-- ! --------! -->
+{% block content %}
+<div class="container">
+    {% if message %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Added Successfully</strong> Go <a href="{% url 'post:mypost' %}" class="text-info">Here</a> To Edit Or Publish Your Content
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %} {% if not article %}
+    <ul class="nav nav-tabs justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link  active" aria-current="page" href="{% url 'post:createpost' %}"> Article Post</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'post:imagepost' %}">Image Post</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'post:videopost' %}">Video Post</a>
+        </li>
+        <!-- <li class="nav-item">
+            <a class="nav-link " href="{% url 'store:store' %}">Products</a>
+        </li> -->
+    </ul>
+    {% endif %}
+</div>
+
+<div class="container mt-2">
+
+
+    {% if article %}
+    <form action="/profile/dashboard/update-post/article/{{article.Id}}/" method="post" enctype="multipart/form-data">
+        {% else %}
+        <form method="POST" action="{% url 'post:save-post' 'article'%}" enctype="multipart/form-data"> {% endif %} {% csrf_token %}
+            <div class="input-group mb-2">
+                <span class="input-group-text" id="inputGroup-sizing-default"><b>Title</b></span>
+                <input type="text" value="{{article.Headline}}" name="headline" required class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class=" mb-2">
+
+                <textarea class="form-control" name="description" placeholder="Description(200 words)" id="exampleFormControlTextarea1" rows="3">{{article.Description}}</textarea>
+            </div>
+
+            <div class="input-group my-3 ">
+                {% if article %}
+                <img class="img-thumbnail mr-5" id="feature_image" width="60%" src="{{article.Feature_Image}}" > {% else %}
+                <img class="img-thumbnail mr-5" style="display: none;" id="feature_image" width="60%" > {% endif %}
+
+                <div class="form-group">
+                    <label for="image_uploader">Feature Image</label>
+                    <div style="display: none;" class="spinner-border text-info" id="image_spinner" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    {% if article %}
+                    <!-- <input style="display: none;" type="text" name="img-backup" value="{{img_name}}">  -->
+                    <input type="file" accept="image/*" name="image" class="form-control-file" id="image_uploader">
+                    {% else %}
+                    <input type="file" accept="image/*" name="image" required  class="form-control-file" id="image_uploader">
+                    {% endif%}
+                    <p class="mt-1 text-muted">Only PNG,JPEG and JPG Format Allowed Of Max Size 3Mb </p>
+                </div>
+            </div>
+            {% if article %} {% if article.Is_free %}
+            <div class="form-check form-check-inline my-3 ml-1">
+                <input class="form-check-input" checked type="radio" name="options" id="option1" value="public">
+                <label class="form-check-label" for="inlineRadio1">Public</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="options" id="option2" value="private">
+                <label class="form-check-label" for="inlineRadio2">For Paying Supporters Only</label>
+            </div>
+            {% else %}
+            <div class="form-check form-check-inline my-3 ml-1">
+                <input class="form-check-input" type="radio" name="options" id="option1" value="public">
+                <label class="form-check-label" for="inlineRadio1">Public</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" checked type="radio" name="options" id="option2" value="private">
+                <label class="form-check-label" for="inlineRadio2">For Paying Supporters Only</label>
+            </div>
+            {% endif %} {% else %}
+            <!-- <div class="btn-group btn-group-toggle mb-4" data-toggle="buttons">
+                <label class="form-check-label active">
+              <input type="radio" name="options" value="public" id="option1" checked> Public
+            </label>
+                <label class="form-check-label">
+              <input type="radio" name="options" value="private" id="option2"> For Subscribers
+            </label>
+
+            </div> -->
+            <div class="form-check form-check-inline my-3 ml-1">
+                <input class="form-check-input" checked type="radio" name="options" id="option1" value="public">
+                <label class="form-check-label" for="inlineRadio1">Public</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="options" id="option2" value="private">
+                <label class="form-check-label" for="inlineRadio2">For Paying Supporters Only</label>
+            </div>
+            <p class="text-muted">Public posts can be seen by everyone. Supporter Only posts can only be seen by paying supporters</p>
+            {% endif %}
+
+
+
+            <div class="mb-3">
+                <textarea class="form-control" name="blog" placeholder="Article Content" id="blog" rows="20">{{article.Content | safe}}</textarea>
+            </div>
+            {% if article %}
+            <button type="submit" class="mt-2 btn btn-outline-info">Update Article</button> {% else %}
+            <button type="submit" class="mt-2 btn btn-outline-info">Save Article</button> {% endif %}
+        </form>
+</div>
+{% endblock content %} {% block script %}
+<script>
+    var input = document.getElementById("image_uploader")
+    let spinner = document.getElementById("image_spinner")
+    let image = document.getElementById("feature_image")
+    let id = "{{id}}";
+    id = id.replaceAll('-', '')
+    input.addEventListener('change', () => {
+        var size = parseFloat(input.files[0].size / 1024).toFixed(2);
+        if (size > 3000) {
+            alert("Please Upload Images Less Than 3mb , Your Supporters Will See Full Quality Images ")
+            return
+        }
+
+        console.log("In File Upload")
+        var data = new FormData()
+        for (const file of input.files) {
+            data.append('files', file, file.name)
+        }
+        spinner.style.display = ""
+        fetch(`/profile/save-image/article-post/${id}`, {
+            method: 'POST',
+            body: data
+        }).then(res => res.json()).then(response => {
+            spinner.style.display = "none"
+
+            let src = response['src']
+            image.style.display = "block"
+            image.src = response['src']
+        });
+
+
+
+
+    });
+</script>
+<script src="https://cdn.ckeditor.com/ckeditor5/25.0.0/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor.create(document.querySelector('#blog'), {
+            removePlugins: ['ImageUpload', 'MediaEmbed']
+        })
+        .catch(error => {
+            console.log(error);
+        });
+</script>
+
+{% endblock script %}

@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+
+<!--                            Zocayaenv\scripts\activate                      -->
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="title" content="Dashboard-{{profile.username}}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="shortcut icon" type="image/jpeg" href="/static/favicon.jpeg"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.2.0/mdb.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>dashboard:-{{user}}</title>
+    <style>
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+        }
+        
+        h2,
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+        
+        p,
+        h4,
+        h5 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+        }
+    </style>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-184520943-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-184520943-1');
+    </script>
+    <!-- Facebook Pixel Code -->
+    <script>
+        ! function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '489931002145673');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+     <img height="1" width="1" 
+    src="https://www.facebook.com/tr?id=489931002145673&ev=PageView
+    &noscript=1"/>
+    </noscript>
+    <!-- End Facebook Pixel Code -->
+</head>
+
+<body>
+    <div class="page-wrapper chiller-theme bg-light toggled">
+        <a style="z-index: 10000;" id="show-sidebar" class="btn btn-sm btn-info" href="#">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+        </a>
+        <nav id="sidebar" class="sidebar-wrapper">
+            <div class="sidebar-content">
+                <div class="sidebar-brand">
+                    <a href="{% url 'dashboard:dashboard' %}"><img class="image-thmbnail" width="100px" src="{% static 'images/Transparent.png' %}" alt=""></a>
+                    <div id="close-sidebar">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class="sidebar-header">
+                    <div class="user-pic">
+
+
+                        <img style="width: 50px;height: 50px;" class="img-responsive rounded-circle" src="{{profile.Avatar}}" alt="User picture">
+
+                    </div>
+                    <div class="user-info align-content-center">
+                        <span class="user-name mt-3">
+                  <strong>{{user}}</strong>
+                </span>
+                        <small class="text-success">Revenue:{{profile.Revenue}}/-INR</small><br>
+                        <small class="text-success">Donation:{{profile.total_donations}}/-INR</small>
+                    </div>
+                </div>
+
+                <div class="text-center mb-3">
+                    <a data-toggle="modal" data-target="#redeemModal" class="btn btn-sm btn-outline-success">Redeem Amount</a>
+                </div>
+
+                <div class="sidebar-menu">
+                    <ul>
+
+                        <li class="sidebar-dropdown">
+                            <a href="{% url 'dashboard:dashboard' %}">
+                                <i class="fa fa-home" aria-hidden="true"></i>
+                                <span>Home Page</span>
+
+                            </a>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="{% url 'dashboard:yoursupporting' %}">
+                                <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                <span>You are Supporting</span>
+
+                            </a>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="{% url 'dashboard:fanpage' %}">
+                                <i class="fa fa-users" aria-hidden="true"></i>
+
+                                <span>My Supporters</span>
+
+                            </a>
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="{% url 'dashboard:memberships' %}">
+
+                                <i class="fa fa-info" aria-hidden="true"></i>
+                                <span>My Membership</span>
+
+                            </a>
+                        </li>
+
+
+                        <li class="sidebar-dropdown">
+                            <!-- <a href="/{{profile.username}}"> -->
+                            <a href="/{{user}}">
+                                <i class="fa fa-columns" aria-hidden="true"></i>
+                                <span>View My Page</span>
+
+                            </a>
+
+                        </li>
+
+                        <li class="sidebar-dropdown">
+                            <a href="{% url 'post:createpost' %}">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                <span>Create New Post</span>
+                            </a>
+
+                        </li>
+                        <li class="sidebar-dropdown">
+                            <a href="{% url 'post:mypost' %}">
+                                <i class="fa fa-window-restore" aria-hidden="true"></i>
+                                <span>My Posts</span>
+                            </a>
+
+                        </li>
+
+                        <li class="sidebar-dropdown">
+                            <a href="{% url 'dashboard:redeempage' %}">
+
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>Amount  Redeemed</span>
+
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </div>
+                <!-- sidebar-menu  -->
+            </div>
+            <!-- sidebar-content  -->
+            <div class="sidebar-footer">
+                {% if notifications %}
+                <a href="#" onclick="remove_notification_badge()" data-toggle="modal" data-target="#Notifications">
+                    <i class="fa fa-bell"></i>
+                    <span id="notification_badge" class="badge badge-pill badge-info notification">NEW</span>
+                </a>
+
+                {% else %}
+                <a href="#" data-toggle="modal" data-target="#Notifications">
+                    <i class="fa fa-bell"></i>
+
+                </a>
+                {% endif %}
+
+
+                <a href="{% url 'general:editprofile' %}">
+                    <i class="fa fa-cog"></i>
+
+                </a>
+                <a href="{% url 'general:logout' %}">
+                    <i class="fa fa-power-off"></i>
+                </a>
+            </div>
+        </nav>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="Notifications" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog  modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Notifications</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="all_messages" class="list-group">
+
+                            {% for obj in notifications %}
+                            <div id="message{{forloop.counter}}" class="list-group-item list-group-item-action">{{obj.Message}}
+
+                                <a href="{{obj.Link}}" class="btn btn-sm btn-outline-info ml-4">Visit</a>
+                                <a onclick="markAsRead('{{obj.Id}}','{{profile.username}}','message{{forloop.counter}}')" class="btn btn-sm btn-outline-warning">Mark As Read</a>
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="closeNotification" class="btn btn-outline-danger btn-sm" data-dismiss="modal">Close</button>
+                        <button onclick="markAllAsRead('{{profile.username}}','closeNotification')" type="button" class="btn btn-info btn-sm">Mark As Read ALL</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- sidebar-wrapper  -->
+        <main class="page-content">
+            <form class="pt-2" method="GET" action="/profile/dashboard/Search/">
+                <div style="z-index: 0;" class="input-group container">
+                    <input class="form-control" type="text" name="q" value="{{ request.GET.q }}" placeholder="Search Creators" aria-label="default input example">
+                    <button type="submit" class="btn btn-outline-info"> <i class="fas fa-search"></i> </button>
+                </div>
+            </form>
+            <div style="z-index: 2000;" class="modal fade" id="redeemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">You can raise the request and our financial team will transfer the money directly in your account.</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                        </div>
+                        <div class="modal-body">
+                            You can raise the request and our financial team will transfer the money directly in your account. You can change your bank account settings
+                            <a href="/profile/edit-profile/editbanksettings/">
+here
+                                </a> . The amount may take a 1-2 days to reach your account. If you do not receive your amount after 1-2 days, kindly send a message on zocayamedia@gmail.com<br> Check Your Account Detail
+                            <form class="mt-3">
+                                {% if profile.user.bankdetail %}
+
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Account Number</label>
+                                    <input disabled type="email" class=" form-control" id="exampleFormControlInput1" placeholder="{{profile.user.bankdetail.Account_Number}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Account Holder Name</label>
+                                    <input disabled type="email" class="disabled form-control" id="exampleFormControlInput1" placeholder="{{profile.user.bankdetail.Account_holder_name}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">IFSC Code</label>
+                                    <input disabled type="email" class=" form-control" id="exampleFormControlInput1" placeholder="{{profile.user.bankdetail.IFSC_Code}}">
+                                </div>
+                                {% else %}
+                                <p>Upload Your Bank Detail First To Reedeem amount</p>
+
+                                {% endif %}
+
+
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Close</button> {% if profile.user.bankdetail %}
+                            <a href="/payment/redeem/" type="button" class="btn btn-sm btn-success">Raise The Request</a> {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% block content %} {% endblock content %}
+
+        </main>
+
+
+
+    </div>
+
+
+
+    <!-- page-content" -->
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+
+</body>
+{% block script %} {% endblock script %}
+<script src="{% static 'js/dashboard.js' %}"></script>
+<script>
+    function markAsRead(notif_id, username, id) {
+        console.log(notif_id, username)
+        let notification_id = notif_id.replaceAll("-", "")
+        let data = {}
+        let url = `/notifications/mark-as-read/${notification_id}/${username}`
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+        document.getElementById(id).style.display = "none"
+    }
+
+    function remove_notification_badge() {
+        document.getElementById('notification_badge').style.display = 'none';
+    }
+
+    function markAllAsRead(username, id) {
+        console.log(username)
+        let data = {}
+        let url = `/notifications/mark-allas-read/${username}`
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+        document.getElementById('all_messages').style.display = "none"
+        document.getElementById(id).click()
+    }
+</script>
+
+
+
+
+</html>

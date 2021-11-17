@@ -1,0 +1,183 @@
+{% extends "Dashboard/Dashboard-base.html" %}
+
+<!-- ! --------! -->
+{% block content %}
+<div class="container">
+
+    <ul class="nav nav-tabs justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="{% url 'post:mypost' %}"> Article Post</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link   active" href="{% url 'post:allimagepost' %}">Image Post</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'post:allvideopost' %}">Video Post</a>
+        </li>
+        <!-- <li class="nav-item">
+            <a class="nav-link " href="{% url 'store:allproductpost' %}">Products</a>
+        </li> -->
+    </ul>
+
+</div>
+<section>
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            {% if in_publish %}
+
+            <a href="{% url 'post:published-post' 'article' %}" class="btn btn-outline-success active btn-sm mx-3 active">Published</a>
+            <a href="{% url 'post:mypost'  %}" class="btn btn-outline-warning  btn-sm mx-3">Un-Published</a> {% else %}
+            <a href="{% url 'post:published-post' 'article' %}" class="btn btn-outline-success  btn-sm mx-3">Published</a>
+            <a href="" class="btn btn-outline-warning active btn-sm mx-3">Un-Published</a> {% endif %}
+
+        </div>
+        <div class="row ">
+            {% if articles %} {% for post in articles %}
+
+
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" style="display: inline-flex;flex-wrap:nowrap;">
+                <div class="card my-5">
+                    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                        <img src="{{post.Feature_Image}}" class="img-fluid" />
+                        <a href="#!">
+                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+                        </a>
+                    </div>
+                    <div class="card-body justify-content-center">
+                        <h5 class="card-title">{{post.Headline}}</h5>
+                        <p class="card-text">
+                            {{post.Description}}
+                        </p>
+                        <a class="link-primary" href="/post/{{profile.username}}/articles/{{post.Id}}">View Post<i style="color: black;" class="fas fa-external-link-square-alt"></i>
+                        </a>
+                    </div>
+                    <div class="card-footer bg-transparent border-info d-flex justify-content-around px-1 py-2">
+
+                        <a href="/profile/dashboard/edit-post/article/{{post.Id}}/" class="btn btn-info btn-sm">Edit</a>
+                        <a type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#publishModal{{ forloop.counter }}">Publish</a>
+                        <a type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ forloop.counter }}">Delete</a>
+                    </div>
+                </div>
+            </div>
+
+
+            {% endfor %} {% else %} {% for post in published_articles %}
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" style="display: inline-flex;flex-wrap:nowrap;">
+                <div class="card my-5">
+                    <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                        <img src="{{post.Feature_Image}}" class="img-fluid" />
+                        <a href="#!">
+                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+                        </a>
+                    </div>
+                    <div class="card-body justify-content-center">
+                        <h5 class="card-title">{{post.Headline}}</h5>
+                        <p class="card-text">
+                            {{post.Description}}
+                        </p>
+                        <a class="link-primary" href="/post/{{profile.username}}/articles/{{post.Id}}">View Post<i style="color: black;" class="fas fa-external-link-square-alt"></i>
+                        </a>
+                    </div>
+                    <div class="card-footer bg-transparent border-info d-flex justify-content-start px-1 py-2">
+
+
+                        <a type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#unpublishModal{{ forloop.counter }}">Un-Publish</a>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %} {% endif %} {% if pagination and pagination.has_next or pagination.has_previous %}
+
+            <nav aria-label="Page navigation example text-center">
+                <ul class="pagination justify-content-center  mt-4 ">
+                    {% if pagination.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link text-info" href="?page={{pagination.previous_page_number}}" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item active">
+                        <a class="page-link bg-info" href="?page={{ pagination.number }}">{{ pagination.number }}</a>
+                    </li>
+                    {% if pagination.has_next %}
+                    <li class="page-item text-info">
+                        <a class="page-link" href="?page={{pagination.next_page_number}}">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+            {% endif %}
+        </div>
+    </div>
+
+
+    <!-- !--------------- -->
+    {% if articles %}
+    <!-- * -->
+    {% for post in articles %}
+    <div class="modal fade" id="deleteModal{{forloop.counter}}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-light">
+                    <h5 class="modal-title" id="deleteModalLabel{{forloop.counter}}">Confrm Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+                </div>
+                <div class="modal-body">
+                    Are You Sure You Want To Delete The Post It cannot Be Restored Again ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel</button>
+                    <a href="/profile/dashboard/delete-post/article/{{post.Id}}/" type="button" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="publishModal{{forloop.counter}}" tabindex="-1" aria-labelledby="publishModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-light">
+                    <h5 class="modal-title" id="publishModalLabel{{forloop.counter}}">Publish Now ?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+                </div>
+                <div class="modal-body">
+                    Are You Sure ,You Want To Publish The Post ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel</button>
+                    <a href="/profile/dashboard/publish-post/article/{{post.Id}}/" type="button" class="btn btn-success btn-sm">Publish Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %} {% else %}
+    <!-- ! -->
+    {% for post in published_articles %}
+
+    <div class="modal fade" id="unpublishModal{{forloop.counter}}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-light">
+                    <h5 class="modal-title" id="deleteModalLabel{{forloop.counter}}">Confirm Unpublish? </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are You Sure You Want To Unpublish The Post It will not be shown on your public profile ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info btn-sm" data-dismiss="modal">Cancel</button>
+                    <a href="/profile/dashboard/unpublish-post/article/{{post.Id}}/" type="button" class="btn btn-warning btn-sm">Unpublish</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %} {% endif %}
+</section>
+
+
+{% endblock content %}

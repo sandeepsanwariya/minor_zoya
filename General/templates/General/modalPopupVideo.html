@@ -1,0 +1,125 @@
+<div style="z-index:20000" class="modal fade" data-bs-backdrop="static" id="modal{{forloop.counter}}" tabindex="-1 " aria-labelledby="staticBackdropLabel " aria-hidden="true ">
+    <div style="padding: 0px; " class="modal-dialog modal-xl modal-dialog-centered ">
+        <div class="modal-content " >
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">{{video.Title}}</h5>
+                <button type="button" onclick="removeVideo('modal{{forloop.counter}}Vid')" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-0 py-0 ">
+
+                <div class="row ">
+                    <div class="col-lg-8 " style="display:flex;justify-content: center; min-width:400px;min-height:400px;">
+                        <iframe src="https://player.vimeo.com/video/{{ video.Link }}?background=1&title=0&byline=0&portrait=0&sidedock=0" alt="Loading...." width="110%" height="auto" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                        <!-- <iframe id="modal{{forloop.counter}}Vid" width="100%" class="mob_iframe" alt="Loading...." data-src="{{ video.Link }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+                    </div>
+                    <div class="col-lg-4 px-2 py-2 ">
+                        <div class="mob_padding">
+
+                            <p>{{video.Description}}</p>
+                            <footer class="blockquote-footer ">Author--/
+                                <cite title="Source Title ">{{profile.username}}</cite></footer>
+                            <!-- !--------------------------- -->
+
+
+                            <div id="likeBtn">
+
+
+                                {% if video.Id.hex in post_ids %}
+                                <svg id="like{{forloop.counter}}" onclick="Like_me('{{video.Id.hex}}','video','{{video.Owner.username}}','like{{forloop.counter}}')" class="ico liked" width="24" height="24" viewBox="0 0 24 24">
+                                        <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"></path>
+                            </svg>
+
+                                <span class="text-muted" style="margin-left:5px;" id="count{{video.Id.hex}}">{{video.Like_count}} </span>
+
+
+                            </div>
+                            {% else %}
+                            <svg id="like{{forloop.counter}}" onclick="Like_me('{{video.Id.hex}}','video','{{video.Owner.username}}','like{{forloop.counter}}')" class="ico" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"></path>
+                        </svg>
+                            <span class="text-muted" style="margin-left:5px;" id="count{{video.Id.hex}}">{{video.Like_count}}</span> {% endif %}
+
+                            <!-- !---------------------------- -->
+                            <div class="mt-3">
+
+                                <button class="btn btn-sm btn-outline-secondary" onClick="copy('p{{forloop.counter}}')">
+                            Share This Post
+                        </button>
+                                <p class="text-secondary mt-3" id="p{{forloop.counter}}" style="font-size: 0px;" onClick='copyText(this)'>
+                                    https://zocaya.com/post/{{profile.username}}/videos/{{video.Id}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+{% block script %}
+<script>
+    function loadVideo(id) {
+        console.log("In Laad Video")
+        var src = document.getElementById(id).dataset.src
+        document.getElementById(id).src = src
+        console.log(src)
+    }
+
+    function removeVideo(id) {
+        console.log("In Remove Video")
+        document.getElementById(id).src = ""
+    }
+    // COPY TO CLIPBOARD
+    // Attempts to use .execCommand('copy') on a created text field
+    // Falls back to a selectable alert if not supported
+    // Attempts to display status in Bootstrap tooltip
+    // ------------------------------------------------------------------------------
+    function copy(id) {
+        document.getElementById(id).click()
+    }
+
+    function copyText(element) {
+        var range, selection, worked;
+
+        if (document.body.createTextRange) {
+            range = document.body.createTextRange();
+            range.moveToElementText(element);
+            range.select();
+        } else if (window.getSelection) {
+            selection = window.getSelection();
+            range = document.createRange();
+            range.selectNodeContents(element);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+
+        try {
+            document.execCommand('copy');
+            alert('share link copied');
+        } catch (err) {
+            alert('unable to copy text');
+        }
+    }
+</script>
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+    $('#myModal').on('shown.bs.modal', function() {
+        $('#myInput').trigger('focus')
+    });
+</script>
+<script>
+    var iframe = document.querySelector('iframe');
+    var player = new Vimeo.Player(iframe);
+
+    player.on('play', function() {
+      console.log('Played the video');
+    });
+
+    player.getVideoTitle().then(function(title) {
+      console.log('title:', title);
+    });
+  </script>
+{% endblock script %}

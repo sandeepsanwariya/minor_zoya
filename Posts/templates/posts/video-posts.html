@@ -1,0 +1,228 @@
+{% extends "Dashboard/Dashboard-base.html" %}
+
+<!-- ! --------! -->
+{% block content %}
+<div class="container">
+
+    {% if message %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Added Successfully</strong> Go <a href="{% url 'post:mypost' %}" class="text-info">Here</a> To Edit Or Publish Your Content
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %} {% if not video %}
+
+    <ul class="nav nav-tabs justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link  " aria-current="page" href="{% url 'post:createpost' %}"> Article Post</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link  " href="{% url 'post:imagepost' %}">Image Post</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link  active" href="{% url 'post:videopost' %}">Video Post</a>
+        </li>
+        <!-- <li class="nav-item">
+            <a class="nav-link " href="{% url 'store:store' %}">Products</a>
+        </li> -->
+    </ul>
+    {% endif %}
+</div>
+
+<div class="container mt-2">
+    {% if video %}
+    <form action="/profile/dashboard/update-post/video/{{video.Id}}/" method="post" enctype="multipart/form-data">
+        {% else %}
+        <form method="POST" action="{% url 'post:save-post' 'video'%}" enctype="multipart/form-data" > {% endif %} {% csrf_token %}
+            <div class="input-group mb-2">
+                <span class="input-group-text" id="inputGroup-sizing-default"><b>Title</b></span>
+                <input type="text" name="headline" value="{{video.Title}}" required class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group my-3 ">
+                {% if video %}
+                 
+                <img class="img-thumbnail mr-5" id="feature_image" width="60%" src="{{video.Thumbnail}}"> {% else %}
+                <img class="img-thumbnail mr-5" style="display: none;" id="feature_image" width="60%"> {% endif %}
+
+                <div class="form-group">
+                    <label for="image_uploader">Upload Thumbnail</label>
+                    <div style="display: none;" class="my-3 spinner-border text-info" id="image_spinner" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    {% if video %}
+                    <input style="display: none;" type="text" name="img-backup" value="">
+                    <!-- ! -->
+                    {% endif %}
+                    <input type="file" accept="image/*" name="image" class="form-control-file" id="image_uploader">
+                    <p class="mt-1 text-muted">Only PNG,JPEG and JPG Format Allowed Of Max Size 3Mb </p>
+                </div>
+            </div>
+            <!-- <a target="blank" href="/static/unlistedvideolink.pdf">Check how to get free unlisted video link</a> -->
+            {% if video %}
+            <div class="input-group mb-2">
+                <span class="input-group-text" id="inputGroup-sizing-default"><b>Upload Video</b></span>
+                <input type="file"  id="video" name="video" class="form-control-file"  accept="video/*">
+    
+            </div>
+            {% else %}
+            <div class="input-group mb-2">
+                <span class="input-group-text" id="inputGroup-sizing-default"><b>Upload Video</b></span>
+                <input type="file"  id="video" name="video" required  class="form-control-file"  accept="video/*">
+    
+            </div>
+            {% endif %}
+            <div id='prog' style="display: none;">
+                <label for="file-upload">uploading progress:</label>
+                <progress id="file-upload" value="0" max="100"></progress>
+            </div>
+
+            {% if video %} {% if video.Is_free %}
+            <div class="form-check form-check-inline my-3 ml-1">
+                <input class="form-check-input" checked type="radio" name="options" id="option1" value="public">
+                <label class="form-check-label" for="inlineRadio1">Public</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="options" id="option2" value="private">
+                <label class="form-check-label" for="inlineRadio2">For Paying Supporters Only</label>
+            </div>
+
+
+</div>
+{% else %}
+<div class="form-check form-check-inline my-3 ml-1">
+    <input class="form-check-input" type="radio" name="options" id="option1" value="public">
+    <label class="form-check-label" for="inlineRadio1">Public</label>
+</div>
+<div class="form-check form-check-inline">
+    <input class="form-check-input" checked type="radio" name="options" id="option2" value="private">
+    <label class="form-check-label" for="inlineRadio2">For Paying Supporters Only</label>
+</div>
+
+</div>
+{% endif %} {% else %}
+<div class="form-check form-check-inline my-3 ml-1">
+    <input class="form-check-input" checked type="radio" name="options" id="option1" value="public">
+    <label class="form-check-label" for="inlineRadio1">Public</label>
+</div>
+<div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="options" id="option2" value="private">
+    <label class="form-check-label" for="inlineRadio2">For Paying Supporters Only</label>
+</div>
+<p class="text-muted">Public posts can be seen by everyone. Supporter Only posts can only be seen by paying supporters</p>
+
+</div>
+{% endif %}
+
+
+<div class="mb-3">
+    <textarea class="form-control" name="blog" placeholder="Description" id="exampleFormControlTextarea1" rows="3">{{video.Description}}</textarea>
+</div>
+
+{% if video %}
+
+
+<button type="submit" class="my-2 ml-5 btn btn-outline-info">Update</button> {% else %}
+<button type="submit" class="my-2 btn ml-5 btn-outline-info">Add Video</button> {% endif %}
+
+</form>
+</div>
+
+{% endblock content %} {% block script %}
+<script>
+    var input = document.getElementById("image_uploader")
+    let spinner = document.getElementById("image_spinner")
+    let image = document.getElementById("feature_image")
+    let imageAlert = document.getElementById('imageAlert')
+    let video = document.getElementById('video')
+    var id = "{{id}}";
+    id = id.replaceAll('-', '');
+    input.addEventListener('change', () => {
+        console.log(input);
+        var size = parseFloat(input.files[0].size / 1024).toFixed(2);
+        if (size > 3000) {
+            alert("Please Upload Images Less Than 3mb , Your Supporters Will See Full Quality Images ")
+            return
+        }
+        console.log("In File Upload")
+        var data = new FormData()
+        for (const file of input.files) {
+            data.append('files', file, file.name)
+        }
+
+        fetch(`/profile/save-image/video-post/${id}`, {
+            method: 'POST',
+            body: data
+        }).then(res => res.json()).then(response => {
+            spinner.style.display = "none"
+            console.log(response)
+            let src = response['src']
+            image.style.display = "block"
+            image.src = response['src']
+
+
+        });
+    });
+    // console.log(video);
+    
+//     video.addEventListener('change', () => {
+//         console.log(video);
+//         console.log("In File Upload")
+//         var data = new FormData()
+//         for (const file of video.files) {
+//             data.append('files', file, file.name)
+//         }
+        
+//         let request = new XMLHttpRequest();
+// request.open('POST', `/profile/save-image/video-post/${id}`); 
+
+// // upload progress event
+// request.upload.addEventListener('progress', function(e) {
+// 	// upload progress as percentage
+// 	let percent_completed = (e.loaded / e.total)*100;
+//     var prog=document.getElementById('prog')
+//     prog.style.display="block"
+//     var up_prog=document.getElementById('file-upload')
+//     up_prog.value=percent_completed
+// 	console.log("p",percent_completed);
+// });
+
+// // request finished event
+// request.addEventListener('load', function(e) {
+// 	// HTTP status message (200, 404 etc)
+// 	console.log(request.status);
+
+// 	// request.response holds response from the server
+// 	console.log(request.response);
+// });
+
+// // send POST request to server
+// request.send(data);
+
+    //     fetch(`/profile/save-image/video-post/${id}`, {
+    //         method: 'POST',
+    //         body: data,
+    //         allowHTTP1ForStreamingUpload: true,
+    //         // onUploadProgress: (p) => {
+    // //   console.log(p); 
+    // //   //this.setState({
+    // //       //fileprogress: p.loaded / p.total
+    // //   //})
+    // // }
+    //     })
+        // .then(res => res.json()).then(response => {
+        //     spinner.style.display = "none"
+        //     console.log(response)
+        //     let src = response['src']
+        //     image.style.display = "block"
+        //     image.src = response['src']
+
+
+        // }
+        
+        
+        
+        // );
+    // });
+</script>
+{% endblock script %}

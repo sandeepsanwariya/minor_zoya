@@ -1,0 +1,28 @@
+{% extends "Dashboard/Dashboard-base.html" %}
+
+<!-- ! --------! -->
+{% block content %}
+
+<div class="container px-5">
+    <form method="POST" action="."> {% csrf_token %}
+        <div class="input-group mb-2">
+            <span class="input-group-text" id="inputGroup-sizing-default"><b>Headline</b></span>
+            <input type="text" name="headline" required class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+
+        <div class="input-group mb-2 ">
+            <p class="mt-1 text-muted">Only PNG,JPEG and JPG Format Allowed Of Max Size 3Mb </p>
+            <input type="file" accept="image/*" name="postimg" class="form-control" id="inputGroupFile02">
+            <label class="input-group-text" for="inputGroupFile02"><b>Article Image</b></label>
+            <button class="btn btn-outline-info btn-sm">Upload Image</button>
+        </div>
+
+        <div class="mb-3">
+            <textarea class="form-control" name="blog" placeholder="Article Content" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="mt-2 btn btn-outline-info">Create Post</button>
+    </form>
+</div>
+
+{% endblock content %}

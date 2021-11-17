@@ -1,0 +1,125 @@
+{% load static %} {% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content=" Independent Artist Directly Paid by Patreon | Start your brand">
+    <meta name="description" content="Independent artists can start their private club for paying fans and show their photos, videos directly. No need for Ads, No demonetised videos">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="shortcut icon" type="image/jpeg" href="/static/favicon.jpeg"/>
+    <title>Zocaya</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-184520943-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-184520943-1');
+    </script>
+    <!-- Facebook Pixel Code -->
+    <script>
+        ! function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '489931002145673');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+     <img height="1" width="1" 
+    src="https://www.facebook.com/tr?id=489931002145673&ev=PageView
+    &noscript=1"/>
+    </noscript>
+    <!-- End Facebook Pixel Code -->
+
+</head>
+
+<body>
+
+    <div class="hero_section">
+
+        <div id="hero_img">
+            <img src="{% static 'images/Transparent2.png' %}" alt="">
+            <p><b>What is Zocaya? </b>The best place for businesses and creators to start a private club membership service.</p>
+            <p><b>How?</b> Provide best products or content to your best supporters with a simple monthly membership service.
+            </p>
+        </div>
+
+        <div class="login_form">
+
+            <div class="shadow">
+
+
+                <div class="form_block">
+                    {% if error %}
+                    <h4 class="error">{{error}}</h4>
+
+                    {% endif %}
+                    <div class="col-3 input-effect">
+                        <form action="" method="POST" id="login_form">
+                            {% csrf_token %}
+                            <input class="effect-21" type="email" name='uname' placeholder="Email">
+                            <label></label>
+                            <span class="focus-border"> 
+                                <i></i>
+                            </span>
+                    </div>
+                    <div class="col-3 input-effect">
+                        <input class="effect-21" name='pass' type="password" placeholder="password">
+                        <label></label>
+
+
+                        </form>
+                        <span class="focus-border">
+                                <i></i>
+                            </span>
+                    </div>
+                    <i></i>
+                    </span>
+
+                    <div class="primary_btn login">
+                        <a class="link_btn fix_click" onclick="document.getElementById('login_form').submit();">Login</a>
+                    </div>
+
+
+                    <div class="primary_btn">
+                        <a href="{% provider_login_url 'google' %}" class="link_btn">Continue With Google</a>
+                    </div>
+                    <a class="button secondaryAction" style="text-decoration: none;color: grey;" href="{% url 'account_reset_password' %}">Forgot Password?</a>
+
+                    <div class="primary_btn create_account">
+                        <a href="{% url 'general:signup' %}" class="link_btn">Create a Private Club</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,322 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap'); */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap');
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: hidden;
+    /* background-color: #E5E5E5; */
+}
+
+.hero_section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    width: 90%;
+    height: 100vh;
+    margin: 0 auto;
+    /* background-color: grey; */
+}
+
+#hero_img {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 6%;
+    text-align: justify;
+}
+
+#hero_img>p {
+    width: 80%;
+    margin-left: 20px;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+#hero_img>img {
+    width: 60%;
+    margin-left: 10px;
+}
+
+.login_form {
+    width: 50%;
+    /* background-color: snow; */
+}
+
+.form_block {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 6%;
+    flex-direction: column;
+    box-shadow: 2px 5px 49px 0px rgba(0, 0, 0, 0.57);
+    -webkit-box-shadow: 2px 5px 49px 0px rgba(0, 0, 0, 0.57);
+    -moz-box-shadow: 2px 5px 49px 0px rgba(0, 0, 0, 0.57);
+}
+
+.link_btn {
+    text-decoration: none;
+    color: white;
+    padding: 6px 40px;
+    transition: 0.5s;
+    cursor: pointer;
+    text-align: center;
+}
+
+.link_btn:hover {
+    color: rgb(218, 218, 218);
+}
+
+.fix_click {
+    padding: 6px 110px;
+}
+
+.shadow {
+    display: block;
+    width: 80%;
+    height: 80%;
+    padding: 60px;
+    /* background-color: #ccc; */
+    float: right;
+    overflow-y: hidden;
+}
+
+.error {
+    color: red
+}
+
+.not-visible {
+    display: none;
+}
+
+.primary_btn {
+    width: 100%;
+    background: linear-gradient(90deg, #C4C4C4 0%, #2F72A1 0.01%, #07EBF1 100%);
+    padding: 6px 0px;
+    text-align: center;
+    margin-bottom: 10px;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    transition: 0.5s;
+    cursor: pointer;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.primary_btn:hover {
+    background: linear-gradient(90deg, #C4C4C4 0%, #07EBF1 0.01%, #2F72A1 100%);
+    /* background: linear-gradient(90deg, #07EBF1 0%, #2F72A1 100%); */
+}
+
+.primary_btn>button {
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.login {
+    margin-top: 12px;
+}
+
+.forgot_password {
+    font-size: 12px;
+    color: grey;
+    margin: 5px 0px;
+}
+
+.create_account {
+    margin-top: 20px;
+    width: 70%;
+    /* font-size: clamp(12px, 10px, 12px); */
+    font-size: clamp(10px, 11px, 12px);
+    text-align: center;
+}
+
+.col-3 {
+    float: left;
+    width: 100%;
+    margin: 2% 3%;
+    position: relative;
+    padding: 0px;
+}
+
+input {
+    font: 14px/24px "Lato", Arial, sans-serif;
+    color: #333;
+    width: 100%;
+    box-sizing: border-box;
+    letter-spacing: 1px;
+}
+
+.effect-21~.focus-border:before,
+.effect-21~.focus-border:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 2px;
+    background-color: #07EBF1;
+    opacity: 0.4;
+    transition: 0.2s;
+    transition-delay: 0.2s;
+}
+
+.effect-21~.focus-border:after {
+    top: auto;
+    bottom: 0;
+    right: auto;
+    left: 0;
+    transition-delay: 0.6s;
+}
+
+ :focus {
+    outline: none;
+}
+
+input {
+    font: 14px/24px "Lato", Arial, sans-serif;
+    color: #333;
+    width: 100%;
+    box-sizing: border-box;
+    letter-spacing: 1px;
+}
+
+.effect-21 {
+    border: 1px solid #ccc;
+    padding: 7px 14px;
+    transition: 0.4s;
+    background: transparent;
+}
+
+.effect-21~.focus-border i:before,
+.effect-21~.focus-border i:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 0;
+    background-color: #07EBF1;
+    opacity: 0.4;
+    transition: 0.6s;
+}
+
+.effect-21~.focus-border i:after {
+    left: auto;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    transition-delay: 0.4s;
+}
+
+.effect-21:focus~.focus-border:before,
+.effect-21:focus~.focus-border:after,
+.has-content.effect-21~.focus-border:before,
+.has-content.effect-21~.focus-border:after {
+    width: 100%;
+    transition: 0.2s;
+    transition-delay: 0.6s;
+}
+
+.effect-21:focus~.focus-border:after,
+.has-content.effect-21~.focus-border:after {
+    transition-delay: 0.2s;
+}
+
+.effect-21:focus~.focus-border i:before,
+.effect-21:focus~.focus-border i:after,
+.has-content.effect-21~.focus-border i:before,
+.has-content.effect-21~.focus-border i:after {
+    height: 100%;
+    transition: 0.2s;
+}
+
+.effect-21:focus~.focus-border i:after,
+.has-conten.effect-21~.focus-border i:after {
+    transition-delay: 0.4s;
+}
+
+.effect-21~label {
+    position: absolute;
+    left: 14px;
+    width: 100%;
+    top: 10px;
+    color: #aaa;
+    transition: 0.3s;
+    z-index: -1;
+    letter-spacing: 0.5px;
+}
+
+.effect-21:focus~label,
+.has-content.effect-21~label {
+    top: -18px;
+    left: 0;
+    font-size: 12px;
+    color: #3399FF;
+    transition: 0.3s;
+}
+
+@media screen and (max-width:900px) {
+    .login_form {
+        width: 50%;
+        margin: 0px;
+    }
+    .shadow {
+        margin: 0 auto;
+        padding: 15px;
+        width: 100vw;
+        float: left;
+    }
+    .form_block {
+        width: 100vw;
+        -webkit-box-shadow: 0px 4px 24px -8px #000000;
+        box-shadow: 0px 4px 24px -8px #000000;
+    }
+    .create_account>a {
+        /* font-size: clamp(12px, 10px, 12px); */
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width:468px) {
+    .hero_section {
+        display: block;
+    }
+    #hero_img {
+        width: 100%;
+        text-align: justify;
+        margin-top: 4vh;
+        margin-bottom: 5px;
+    }
+    #hero_img>p {
+        margin: 0 auto;
+        font-size: 11px;
+    }
+    #hero_img>img {
+        margin: 0 auto;
+        margin-bottom: 2vh;
+    }
+    .shadow {
+        margin: 0 auto;
+        padding: 15px;
+        width: 100vw;
+        float: left;
+    }
+    .login_form {
+        width: 100%;
+        margin: 0px;
+    }
+    .form_block {
+        width: 100vw;
+        -webkit-box-shadow: 0px 4px 24px -8px #000000;
+        box-shadow: 0px 4px 24px -8px #000000;
+    }
+}

@@ -1,0 +1,115 @@
+{% extends "Dashboard/Dashboard-base.html" %}
+
+<!-- ! --------! -->
+{% block content %}
+<div class="container">
+    {% if message %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Added Successfully</strong> Go <a href="{% url 'post:mypost' %}" class="text-info">Here</a> To Edit Or Publish Your Content
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %} {% if not product %}
+    <ul class="nav nav-tabs justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="{% url 'post:createpost' %}"> Article Post</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'post:imagepost' %}">Image Post</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'post:videopost' %}">Video Post</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'store:store' %}">Products</a>
+        </li>
+    </ul>
+    {% endif %}
+</div>
+
+
+<div class="container px-5">
+    {% if product %}
+    <form action="/profile/dashboard/update-post/product/{{product.Id}}/" method="post">
+        {% else %}
+        <form method="POST" action="{% url 'post:save-post' 'product'%}">
+            {% endif %}
+            <!-- ! -->
+            {% csrf_token %}
+            <div class="input-group mb-2">
+                <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+                <input type="text" name="headline" value="{{product.Headline}}" required class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+
+            <div class="input-group my-3 ">
+                {% if product %}
+                <img class="img-thumbnail mr-5" id="feature_image" width="60%" src="{{product.Image.url}}"> {% else %}
+                <img class="img-thumbnail mr-5" style="display: none;" id="feature_image" width="60%"> {% endif %}
+                <div class="form-group">
+                    <label for="image_uploader">Upload Product Image</label>
+                    <div style="display: none;" class="my-3 spinner-border text-info" id="image_spinner" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    {% if product %}
+                    <input style="display:none;" type="text" id="img-backup" name="img-backup" value="{{img_name}}">
+                    <!-- ! -->
+                    {% endif %}
+                    <input type="file" accept="image/*" name="image" class="form-control-file" id="image_uploader">
+                    <p class="mt-1 text-muted">Only PNG,JPEG and JPG Format Allowed Of Max Size 3Mb </p>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <textarea class="form-control" name="blog" placeholder="Description Of Product" id="exampleFormControlTextarea1" rows="3">{{product.Description}}</textarea>
+            </div>
+            <div class="input-group mb-2">
+                <span class="input-group-text" id="inputGroup-sizing-default">Price in INR</span>
+                <input type="text" name="price" value="{{product.Price}}" required class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+
+            {% if product %}
+            <button type="submit" class="mt-2 btn btn-outline-info">Update</button> {% else %}
+            <button type="submit" class="mt-2 btn btn-outline-info">Add Product</button> {% endif %}
+        </form>
+</div>
+
+{% endblock content %}
+<!-- ! -->
+{% block script %}
+<script>
+    var input = document.getElementById("image_uploader")
+    let spinner = document.getElementById("image_spinner")
+    let image = document.getElementById("feature_image")
+    var id = "{{id}}";
+    id = id.replaceAll('-', '')
+    input.addEventListener('change', () => {
+        var size = parseFloat(input.files[0].size / 1024).toFixed(2);
+        if (size > 3000) {
+            alert("Please Upload Images Less Than 3mb , Your Supporters Will See Full Quality Images ")
+            return
+        }
+
+        console.log("In File Upload")
+        var data = new FormData()
+        for (const file of input.files) {
+            data.append('files', file, file.name)
+        }
+
+        fetch(`/profile/save-image/products/${id}`, {
+            method: 'POST',
+            body: data
+        }).then(res => res.json()).then(response => {
+            spinner.style.display = "none"
+
+            let src = response['src']
+            image.style.display = "block"
+            image.src = response['src']
+        });
+
+
+
+
+    });
+</script>
+{% endblock script %}

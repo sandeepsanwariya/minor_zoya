@@ -1,0 +1,42 @@
+{% if visitor_profile %}
+
+<form method="POST" id="form{{forloop.counter}}" action="{% url 'general:updateshippingaddr' post.Id.hex profile.Id.hex %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label class="form-label" for="exampleInputEmail1">Email(Not Editable)</label>
+        <input disabled required type="text" name="AccNum" value="{{visitor_profile.user.email}}" class="mb-3 disabled form-control form-control-sm" id="exampleInputEmail1" aria-describedby="emailHelp">
+
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="exampleInputEmail1">Your Name(Not Editable)</label>
+        <input required type="text" name="code" value="{{visitor_profile.Name}}" disabled class="mb-3 form-control form-control-sm" id="exampleInputEmail1" aria-describedby="emailHelp">
+
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="exampleInputEmail1">Phone Number</label>
+        <input required type="text" name="AccName" value="{{visitor_profile.Phone_no}}" class="mb-3 form-control form-control-sm" id="exampleInputEmail1" aria-describedby="emailHelp">
+
+    </div>
+    <label class="form-label" for="address">Address</label>
+    <div class="row" id="address">
+        <div class="col">
+            <input required type="text" id="addrLine{{forloop.counter}}" name="address" value="{{addr.address_line}}" class="form-control  form-control-sm " placeholder="Delivery Address">
+        </div>
+        <div class="col">
+            <input required type="text" id="city{{forloop.counter}}" name="city" value="{{addr.city}}" class="form-control  form-control-sm" placeholder="City">
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <input required type="text" id="state{{forloop.counter}}" name="state" value="{{addr.state}}" class="form-control  form-control-sm " placeholder="State">
+        </div>
+        <div class="col">
+            <input required type="tel" id="pincode{{forloop.counter}}" name="pincode" value="{{addr.pin_code}}" class="form-control  form-control-sm" placeholder="Pincode">
+        </div>
+    </div>
+
+    <button type="submit" id="submitAddr" style="display: none;" class="btn btn-success btn-sm mt-4">Next</button>
+</form>
+{% else %}
+<h1>Login First To Make Purchase</h1>
+{% endif %}

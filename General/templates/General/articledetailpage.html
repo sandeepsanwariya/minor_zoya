@@ -1,0 +1,45 @@
+{% extends "General/user-profile-base.html" %}
+<!-- ! -->
+{% block content %}
+
+<hr>
+
+<div class="container width_req">
+    {% if content.Is_free %}
+
+    <img style="width: 80%;" src="{{ content.Feature_Image}}" class="img-fluid mb-3 article_width" alt="">
+    <h1 class="my-3 article_width">{{ content.Headline }}</h1>
+    <div class="article_width" style="text-align: justify;">
+
+        {{ content.Content|safe }}
+    </div>
+
+    <div class="blockquote-footer mt-5">
+        <h5>Author</h5> <cite title="Source Title">{{ profile.username }}</cite>
+
+    </div>
+    <a href="/{{ profile.username }}" class="text-info ">Visit Profile
+        <svg class="ml-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16">
+            <path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12zM5.904 10.803L10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707z"/>
+      </svg></a> {% else %} {% if visitor in content.Owner.My_subscribers.all %}
+    <img style="width: 80%;" src="{{ content.Feature_Image.url }}" class="img-fluid mb-3 article_width" alt="">
+    <h1 class="my-3">{{ content.Headline }}</h1>
+    <div class="article_width">
+
+        {{ content.Content|safe }}
+    </div>
+
+    <div class="blockquote-footer mt-5">
+        <h5>Author</h5> <cite title="Source Title">{{ profile.username }}</cite>
+
+    </div>
+    <a href="/{{ profile.username }}" class="text-info ">Visit Profile
+          <svg class="ml-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16">
+              <path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12zM5.904 10.803L10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707z"/>
+        </svg>
+        {% else %}
+        <img style="width: 80%;" src="/images/lock.jpg" class="img-fluid mb-3 article_width" alt="">
+      {% endif %}{% endif %}
+    </div>
+    <!-- ! -->
+    {% endblock content %}

@@ -1,0 +1,49 @@
+{% extends "Dashboard/Dashboard-base.html" %} {% block content %}
+
+<section>
+    <div class="container px-4">
+        <h3 class="mb-3">Search Result For <span class="text-info">{{query}}</span></h3>
+        <div class="row">
+            {% for fan in prof %}
+            <div class="col-md-3">
+                <div class="card profile-card-2 mt-5">
+                    <div class="card-body pt-5">
+                        <img style="width: 60px; height: 60px;" src="{{fan.Avatar}}" alt="profile-image" class="profile" />
+                        <h5 class="card-title text-info">{{fan.Name}}</h5>
+                        <p class="card-text">{{fan.Bio}}</p>
+                        <a class="link-primary" href="/{{fan.username}}">Visit Profile<i style="color: black;" class="fas fa-external-link-square-alt"></i>
+                    </a>
+                    </div>
+                </div>
+                <p class="mt-3 w-100 float-left text-center"></p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% if pagination and pagination.has_next or pagination.has_previous %}
+
+    <nav aria-label="Page navigation example text-center">
+        <ul class="pagination justify-content-center  mt-4 ">
+            {% if pagination.has_previous %}
+            <li class="page-item">
+                <a class="page-link text-info" href="?page={{pagination.previous_page_number}}" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            {% endif %}
+            <li class="page-item active">
+                <a class="page-link bg-info" href="?page={{ pagination.number }}">{{ pagination.number }}</a>
+            </li>
+            {% if pagination.has_next %}
+            <li class="page-item text-info">
+                <a class="page-link" href="?page={{pagination.next_page_number}}">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    {% endif %}
+    </div>
+</section>
+
+
+
+{% endblock content %}

@@ -1,0 +1,57 @@
+{% extends "Dashboard/Dashboard-base.html" %}
+
+<!-- ! --------! -->
+{% block content %}
+
+<div class="container">
+    <h1 class="mt-5">You're Supporting</h1>
+</div>
+<section>
+    <div class="container px-4">
+        <div class="row">
+            {% for p in following %}
+            <div class="col-md-3">
+                <div class="card profile-card-2 mt-5">
+                    <div class="card-body pt-5">
+                        <img style="width: 60px; height: 60px;" src="{{p.profile.Avatar}}" alt="profile-image" class="profile" />
+                        <h5 class="card-title text-info">{{p.profile.Name}}</h5>
+                        <p class="card-text">{{p.profile.Bio|slice:'0:200'}} .........
+                        </p>
+                         
+                        <a class="link-primary" href="/{{p.username}}">Visit Profile<i style="color: black;" class="fas fa-external-link-square-alt"></i>
+                        </a>
+                    </div>
+                </div>
+                <p class="mt-3 w-100 float-left text-center"></p>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if following and following.has_next or following.has_previous %}
+
+        <nav aria-label="Page navigation example text-center">
+            <ul class="pagination justify-content-center  mt-4 ">
+                {% if following.has_previous %}
+                <li class="page-item">
+                    <a class="page-link text-info" href="?page={{following.previous_page_number}}" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+                {% endif %}
+                <li class="page-item active">
+                    <a class="page-link bg-info" href="?page={{ following.number }}">{{ following.number }}</a>
+                </li>
+                {% if following.has_next %}
+                <li class="page-item text-info">
+                    <a class="page-link" href="?page={{following.next_page_number}}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock content %} {% block script %}
+<script src="https://cdn.tutorialjinni.com/Detect.js/2.2.2/detect.js"></script>
+<script defer type="text/javascript" src="/static/js/detectBrowser.js"></script>{% endblock script %}

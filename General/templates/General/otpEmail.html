@@ -1,0 +1,206 @@
+ {% load static %} {% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="Zocaya Sign up - Independent Artist Directly Paid by Patreon">
+    <meta name="description" content=": Zocaya Sign up allows Independent artists to start their private club for paying fans and show their photos, videos directly. No need for Ads, No demonetised videos">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Zocaya</title>
+<link rel="shortcut icon" type="image/jpeg" href="/static/favicon.jpeg"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-184520943-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-184520943-1');
+    </script>
+    <!-- Facebook Pixel Code -->
+    <script>
+        ! function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '489931002145673');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+ <img height="1" width="1" 
+src="https://www.facebook.com/tr?id=489931002145673&ev=PageView
+&noscript=1"/>
+</noscript>
+    <!-- End Facebook Pixel Code -->
+</head>
+
+<body>
+
+    <div class="hero_section">
+
+        <div id="hero_img">
+            <img src="{% static 'images/Transparent2.png' %}" alt="">
+            <p><b>What is Zocaya? </b>The best place for businesses and creators to start a private club membership service.</p>
+            <p><b>How?</b> Provide best products or content to your best supporters with a simple monthly membership service.
+            </p>
+
+        </div>
+
+        <div class="login_form">
+
+
+
+
+            <div class="form_block">
+                <form method="POST" action=".">
+                    {% csrf_token %}
+                    <h2 class="mb- mr-3"> Verify Your Email</h2>
+                    <div id="alert-otp" class="alert alert-success alert-dismissible fade show" style="display: none;" role="alert">
+                        <strong>Success!</strong> OTP Send.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% if message %}
+                    <div id="alert-otp" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Fail!</strong> {{message}}.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
+                    <p class="text-muted">{{profile.user.email}}</p>
+
+                    <a class="tex-info" href="{% url 'general:change_email_number' %}">Change Email</a>
+
+
+
+                    <div>
+                        <input type="text " class="form-control " name="otpmail" placeholder="Enter OTP From Email " aria-label="Recipient 's username" aria-describedby="button-addon2">
+
+                        <button style="width: 100%;" class="btn btn-outline-success mt-3 btn-block" type="button" id="sendOTP_button">
+                            <span id="send_otp_text">Send OTP</span>
+                            <div style="display: none;" class="spinner-border text-success spinner-border-sm" id="otp_spinner" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </button>
+                        <button style="width: 45%;" class="btn btn-outline-info mt-3 btn-block" type="submit" id="conferm_button">Confirm</button>
+                        <a id="logout_link" style="width: 45%; float:right;" class="btn btn-outline-danger mt-3 btn-block" href="{% url 'general:logout' %} " type="submit" id="conferm_button">Logout</a>
+                    </div>
+                    <div id="timer" style="display: none;" class="text-muted mt-3">
+
+                        valid for 2 mins Resend OTP in <span id="time"></span> sec
+                    </div>
+
+
+                    <form/>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
+</body>
+<script defer type="text/javascript">
+    window.onload = myFunction();
+
+    function myFunction() {
+        console.log("IN FUNCTION")
+        let time = 120
+        let time_view = document.getElementById('time')
+        let sendOTP_button = document.getElementById('sendOTP_button')
+        let logout_link = document.getElementById('logout_link')
+        let otp_spinner = document.getElementById('otp_spinner')
+        let alert_otp = document.getElementById('alert-otp')
+        let notallowed = sendOTP_button.classList.contains('disabled')
+        let data = {
+            username: '{{profile.username}}'
+        }
+
+        function sendOTP() {
+            time = 120
+            otp_spinner.style.display = ""
+            alert_otp.style.display = "none"
+            console.log("In Send OTP")
+            if (!notallowed) {
+
+
+                otp_spinner.style.display = ""
+                sendOTP_button.classList.toggle('disabled')
+                logout_link.classList.toggle('disabled')
+                fetch('/profile/generate-otp/', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                }).then(response => response.json()).then(json => {
+                    console.log(json)
+                    if (json['success']) {
+                        otp_spinner.style.display = "none"
+                        alert_otp.style.display = ""
+                        alert("OTP Send Successfully!")
+                        document.getElementById('timer').style.display = "";
+                        var id = window.setInterval(function() {
+                            time = time - 1
+                            time_view.innerHTML = time
+                            if (time <= 0) {
+                                sendOTP_button.classList.toggle('disabled')
+                                logout_link.classList.toggle('disabled')
+                                otp_spinner.style.display = "none"
+
+                                window.clearInterval(id)
+                            }
+
+                        }, 1000);
+                    } else {
+                        alert("Please Wait For 2 mins before sending another otp")
+                        otp_spinner.style.display = "none"
+                        alert_otp.style.display = ""
+                    }
+                })
+
+
+
+
+            }
+        }
+
+        console.log(sendOTP_button)
+        sendOTP()
+        sendOTP_button.addEventListener('click', sendOTP);
+
+        function my_onkeydown_handler(event) {
+            switch (event.keyCode) {
+                case 116: // 'F5'
+                    event.preventDefault();
+                    event.keyCode = 0;
+                    window.status = "F5 disabled";
+                    break;
+            }
+        }
+        document.addEventListener("keydown", my_onkeydown_handler);
+    }
+</script>
+
+</html>

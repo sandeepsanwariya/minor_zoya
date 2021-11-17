@@ -1,0 +1,36 @@
+{% extends "Dashboard/Dashboard-base.html" %} {% block content %}
+
+<section class="py-4">
+    <div class="container px-4 py-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">S.no</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if not amountRedeemed %}
+                <tr>
+                    <td class="text-success">
+
+                        Amount Not Redeemed Yet!
+                    </td>
+                </tr>
+                {% endif %} {% for obj in amountRedeemed %}
+
+                <tr>
+                    <th scope="row">1</th>
+                    <td class="text-success">{{obj.Amount}}/-INR</td>
+                    <td>{{obj.Date}}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock content %}

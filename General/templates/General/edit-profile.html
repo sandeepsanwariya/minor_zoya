@@ -1,0 +1,384 @@
+{% extends "Dashboard/Dashboard-base.html" %}
+
+<!-- ! --------! -->
+{% block content %}
+
+<style>
+@keyframes mymove {
+            from {color: grey;}
+            to {color: green;}
+            }
+</style>
+<style>
+.reorder-order{
+  display:flex;
+  justify-content:space-evenly;
+  align-items:center;
+  background-color: #f6f6f6;
+  max-width: 600px;
+
+}
+.reorder-order div {
+  background-color:white;
+  padding-left: 3%;
+  padding-right:3%;
+  border: 2px solid;
+  border-radius:10%;
+  display:flex;
+  justify-content:stretch;
+  align-items:center;
+}
+.reorder-order .del{
+  position: relative;
+  left: 10px;
+  font-size:small;
+  color: rgb(169, 169, 175);
+  padding-left: 5%;
+}
+    </style>
+
+<div class="mt-5 pt-3">
+    {% if messages %} {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %} {% endif %}
+</div>
+
+<ul class="nav nav-tabs justify-content-center">
+    <li class="nav-item">
+        <a class="nav-link active" href="/profile/edit-profile/">General Profile Settings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link " aria-current="page" href="{% url 'general:changeavatar' %}">Change Avatar</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link " aria-current="page" href="{% url 'general:passwordreset' %}">Change Password</a>
+    </li>
+    {% if not banksetting.exists %}
+    <li class="nav-item">
+        <a class="nav-link " aria-current="page" href="{% url 'general:banksetting' %}">Bank Setting</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link" aria-current="page" href="{% url 'general:editbanksetting' %}">Edit Bank Setting</a>
+    </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link" aria-current="page" href="{% url 'general:publicprofilesetting' %}">Subscription Settings</a>
+    </li>
+</ul>
+<div class="container px-5">
+
+    <h2 class="text-left my-5 ">General Profile Settings</h2>
+
+    <form method="POST" action="{% url 'general:editprofile' %}"> {% csrf_token %}
+        <h4> Your Private Club Link-</h4>
+        <div class="input-group mb-2">
+            <span class="input-group-text" id="inputGroup-sizing-default">www.zocaya.com/</span>
+            <input type="text" name="newusername" value="{{profile.username}}" required class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+
+        <div class="input-group mb-2">
+            <span class="input-group-text" id="inputGroup-sizing-default">Name</span>
+            <input type="text" name="newname" value="{{profile.Name}}" required class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+
+        <div class="mb-3">
+            <textarea class="form-control" name="newbio" placeholder="About Me" id="exampleFormControlTextarea1" rows="3">{{profile.Bio}}</textarea>
+        </div>
+
+        <div class="input-group mb-2">
+            <span class="input-group-text" id="inputGroup-sizing-default">Phone</span>
+            <input type="tel" name="newnum" value="{{profile.Phone_no}}" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+
+
+
+        {% include "countries.html" %}
+
+
+        <div class="input-group mb-2">
+            <!-- <label class="input-group-text" for="inputGroupSelect01">inputSocialAccount</label> -->
+            <span class="input-group-text" id="inputGroup-sizing-default">Add SocialAccounts</span>
+            <select class="form-select" name="social" id="mySelect" onchange="myFunction(value)">
+                <option selected>Choose...</option>
+                <option value="YouTube">YouTube</option>
+                <option value="Instagram">Instagram</option>
+                <option value="Twitter">Twitter</option>
+                <option value="Facebook">Facebook</option>
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="MX-Takatak">MX-Takatak</option>
+                
+            </select>
+          </div>
+        
+          <div>
+            <span  id='YouTube'  >  <b>Youtube   </b><input id='YouTube_input' type="text" style="width: 70%;" name="YouTube" class="form-control" value="{{social.YouTube}}" on oninput="socialchange(value,'YouTube')" class="input" /> <i class="fa fa-minus-circle" onclick="socialminimize('YouTube')" style="margin-right:3%;color: rgb(169, 169, 175);;font-size:small;" aria-hidden="true"></i> <i class="fa fa-trash"  onclick="socialremove('YouTube')" style="font-size:small;color: rgb(169, 169, 175);" aria-hidden="true"></i>  <br><br></span>
+            <span  id="Instagram"   ><b>Instagram </b><input id="Instagram_input"  type="text" style="width: 70%;" name="Instagram" class="form-control"  value="{{social.Instagram}}" oninput="socialchange(value,'Instagram')" class="input" /><i class="fa fa-minus-circle" onclick="socialminimize('Instagram')" style="margin-right:3%;color: rgb(169, 169, 175);;font-size:small;" aria-hidden="true"></i><i class="fa fa-trash"  onclick="socialremove('Instagram')" style="font-size:small;color: rgb(169, 169, 175);" aria-hidden="true"></i><br><br></span>
+            <span  id="Twitter" >  <b>Twitter   </b>  <input id="Twitter_input" type="text" style="width: 70%;" name="Twitter" class="form-control"  value="{{social.Twitter}}" oninput="socialchange(value,'Twitter')" class="input" /><i class="fa fa-minus-circle" onclick="socialminimize('Twitter')" style="margin-right:3%;color: rgb(169, 169, 175);;font-size:small;" aria-hidden="true"></i><i class="fa fa-trash"  onclick="socialremove('Twitter')" style="font-size:small;color: rgb(169, 169, 175);" aria-hidden="true"></i><br><br></span>
+            <span  id="Facebook"  > <b>Facebook  </b><input id="Facebook_input" type="text" style="width: 70%;" name="Facebook" class="form-control"  value="{{social.Facebook}}" oninput="socialchange(value,'Facebook')" class="input" /><i class="fa fa-minus-circle" onclick="socialminimize('Facebook')" style="margin-right:3%;color: rgb(169, 169, 175);;font-size:small;" aria-hidden="true"></i><i class="fa fa-trash"  onclick="socialremove('Facebook')" style="font-size:small;color: rgb(169, 169, 175);"aria-hidden="true"></i><br><br></span>
+            <span  id="LinkedIn" > <b>LinkedIn  </b><input id="LinkedIn_input" type="text" style="width: 70%;" name="LinkedIn" class="form-control"  value="{{social.LinkedIn}}" oninput="socialchange(value,'LinkedIn')" class="input" /><i class="fa fa-minus-circle" onclick="socialminimize('LinkedIn')" style="margin-right:3%;color: rgb(169, 169, 175);;font-size:small;" aria-hidden="true"></i><i class="fa fa-trash" onclick="socialremove('LinkedIn')" style="font-size:small;color: rgb(169, 169, 175);" aria-hidden="true"></i><br><br></span>
+            <span id="MX-Takatak"  ><b>MX-Takatak</b><input   id="MX-Takatak_input" type="text" style="width: 70%;" name="Takatak" class="form-control"  value="{{social.Takatak}}" oninput="socialchange(value,'MX-Takatak')" class="input" /><i class="fa fa-minus-circle" onclick="socialminimize('MX-Takatak')" style="margin-right:3%;color: rgb(169, 169, 175);;font-size:small;" aria-hidden="true"></i><i class="fa fa-trash"  onclick="socialremove('MX-Takatak')" style="font-size:small;color: rgb(169, 169, 175);" aria-hidden="true"></i><br><br></span>
+          </div>
+          <h6 style='font-size:9px; display: none;animation: mymove 5s infinite;
+          animation-delay: 2s;  ' id='done'><i class="fa fa-check" aria-hidden="true"></i>social media links are auto saved</h6>
+
+
+
+<div class="container">
+  <div>
+
+    <br>
+    <h4><b>Customise your tabs order of profile</b></h4></div>
+    <div>     
+        <div class="orders">
+            <input name="od" id="set_value" style="display: none;" value='{{profile.tab_order}}' ></input>
+            <label>Add</label>
+            
+<select name="set_order" id="set_order" oninput="ordering(value)" >
+    <option >Select component</option>
+    <option value="image">images</option>
+    <option value="articles">articles</option>
+    <option value="videos">videos</option>
+</select>
+          <div class="reorder-order"  id="reorder_order">
+
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+</div>
+
+        <button type="submit" id="sub" class="mt-2 btn btn-outline-info">Update Profile</button>
+        
+    </form>
+  
+    
+{% endblock content %}
+{% block script %}
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script> -->
+<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+<script>
+    let arr=['Youtube','Instagram','Twitter','Facebook','LinkedIn','MX-Takatak']
+    
+    let dict={'YouTube':"{{social.YouTube}}",'Instagram':"{{social.Instagram}}",'Twitter':"{{social.Twitter}}",'Facebook':"{{social.Facebook}}",'LinkedIn':"{{social.LinkedIn}}",'MX-Takatak':"{{social.Takatak}}"}
+    var arrayLength = arr.length;
+    for (const [key, value] of Object.entries(dict)) {
+    dict[key]=value
+   console.log( 'key',key,'val', value);
+  var set=document.getElementById(key)
+  console.log()
+  if(value.length===0){
+    console.log(set)
+    var set=document.getElementById(key)
+  set.style.display="none"
+  }
+  else{
+    var set=document.getElementById(key)
+  set.style.display="block"
+  }
+}
+function myFunction(e) {
+    console.log('hy',e)
+  var set=document.getElementById(e)
+  set.style.display="block"
+  console.log(dict)
+  
+}
+
+function socialchange(val,nam){
+    dict[nam]=val
+    console.log(dict)
+    var d=document.getElementById('done')
+    d.style.display="block"
+    d.style.color="green"
+    d.style.marginTop=""
+
+}
+
+function socialremove(nam){
+    var set=document.getElementById(nam)
+    var set_input=document.getElementById(nam+"_input")
+        set.style.display="none"
+        dict[nam]=''
+        set_input.value=''
+        console.log(dict)
+}
+function socialminimize(nam){
+    var set=document.getElementById(nam)
+    set.style.display="none"
+}
+
+
+
+
+var od={"image":"",'videos':"","articles":""}
+var item_order = new Array();
+ts='{{profile.tab_order}}'
+if(ts.length>1){
+  item_order=ts.split(",")
+}else{
+  item_order=[]
+}
+
+document.getElementById('set_value').value=item_order
+
+for (var i = 0; i < item_order.length; i++) {
+    console.log(item_order[i]);
+  
+    var node = document.createElement("div");
+    var min = document.createElement("span");
+    min.innerHTML=`<i class="fa fa-minus-circle del" onclick="del_item('${item_order[i]}')"  aria-hidden="true"></i>`
+    // min.setAttribute('class',"fa fa-minus-circle")
+    // min.setAttribute("aria-hidden","true")
+    node.setAttribute('draggable','true')
+    node.innerHTML=item_order[i]
+    // min.setAttribute('class','delete')
+    if(item_order[i]==='image'){
+      console.log('aweswd')
+    }else{
+      node.appendChild(min)
+    }
+    node.setAttribute('class','draging')
+    // node.setAttribute('draggable','true')
+    // node.setAttribute('ondrop','draggin(evt)')
+    // node.setAttribute('ondragover','draggin(evt)')
+    // node.setAttribute('ondragenter','draggin(evt)')
+    // node.setAttribute('ondragleave','draggin(evt)')
+    node.setAttribute('id',item_order[i])
+    document.getElementById("reorder_order").appendChild(node)
+    document.getElementById('set_value').value=item_order
+    
+   
+}
+
+function ordering(val){
+  console.log('s',val)
+    const ul = document.getElementById('reorder_order');
+    const listItems = ul.getElementsByTagName('div')
+    console.log('list',listItems)
+    if(val  in listItems){
+    console.log('list',val)
+    }else{
+      item_order.push(val)
+    var node = document.createElement("div");
+    var min = document.createElement("span");
+    min.innerHTML=`<i class="fa fa-minus-circle del" onclick="del_item(${val})"  aria-hidden="true"></i>`
+    // min.setAttribute('class',"fa fa-minus-circle")
+    // min.setAttribute("aria-hidden","true")
+    node.setAttribute('draggable','true')
+    node.innerHTML=val
+    // min.setAttribute('class','delete')
+    if(item_order[i]==='image'){
+      console.log('aweswd')
+    }else{
+      node.appendChild(min)
+    }
+    document.getElementById('set_value').value=item_order
+    node.setAttribute('id',val)
+    node.setAttribute('class','draging')
+    // node.setAttribute('ondrop','draggin(evt)')
+    // node.setAttribute('ondragover','draggin(evt)')
+    // node.setAttribute('ondragenter','draggin(evt)')
+    // node.setAttribute('ondragleave','draggin(evt)')
+    // node.setAttribute('draggable','true')
+    document.getElementById("reorder_order").appendChild(node)
+    
+    // document.getElementById("reorder-order").appendChild(min)
+    
+    }
+    
+
+}
+// var s=new Sortable(reorder_order, {
+//    animation: 150,
+//    ghostClass: 'sortable-ghost',
+//    ondrop:draggin()
+   
+//  },document.getElementById('set_value').value=item_order,console.log('hy'));
+ 
+console.log(s)
+
+function del_item(val){
+  console.log(val)
+  item_order=item_order.filter(item => item !== val)
+  console.log('a',item_order)
+  const parent = document.getElementById("reorder_order")
+while (parent.firstChild) {
+    parent.firstChild.remove()
+}
+document.getElementById('set_value').value=item_order
+  for (var i = 0; i < item_order.length; i++) {
+    console.log(item_order[i]);
+    var node = document.createElement("div");
+    var node = document.createElement("div");
+    var min = document.createElement("span");
+    min.innerHTML=`<i class="fa fa-minus-circle del" onclick="del_item('${item_order[i]}')"  aria-hidden="true"></i>`
+    // min.setAttribute('class',"fa fa-minus-circle")
+    // min.setAttribute("aria-hidden","true")
+    node.setAttribute('draggable','true')
+    node.innerHTML=item_order[i]
+    // min.setAttribute('class','delete')
+    
+    if(item_order[i]==='image'){
+      console.log('aweswd')
+    }else{
+      node.appendChild(min)
+    }
+    node.setAttribute('id',item_order[i])
+    node.setAttribute('class','draging')
+    // node.setAttribute('draggable','true')
+    // node.setAttribute('ondrop','draggin(evt)')
+    // node.setAttribute('ondragover','draggin(evt)')
+    // node.setAttribute('ondragenter','draggin(evt)')
+    // node.setAttribute('ondragleave','draggin(evt)')
+    document.getElementById("reorder_order").appendChild(node)
+
+  
+   
+}
+}
+
+var done =document.getElementById('sub')
+done.addEventListener("click", function() {
+  // console.log(item_order)
+  document.getElementById('set_value').value=item_order
+  console.log('sasdad',document.getElementById('set_value').value)
+}
+)
+
+var dr=document.getElementById("image")
+console.log('asa',dr)
+dr.addEventListener("ondrag", function(){
+        var dr=document.getElementsByClassName('draging')
+console.log('asa',dr)
+      });
+function draggin(){
+  // evt.preventDefault();
+  var dr=document.getElementsByClassName('draging')
+  document.getElementById('set_value').value=item_order
+console.log('asa',dr)
+}
+// Array.from(dr).forEach(function(dr) {
+      
+//     });
+
+//     document.addEventListener("drag", function(event) {
+//       var dr=document.getElementsByClassName('draging')
+// console.log('asa',dr)
+// });
+
+
+// document.addEventListener("dragleave", function(event) {
+// var dr=document.getElementsByClassName('draging')
+// console.log('asa',dr)
+
+// });
+</script>
+
+{% endblock script %}

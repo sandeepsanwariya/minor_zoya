@@ -1,0 +1,104 @@
+{% extends "Dashboard/Dashboard-base.html" %}
+
+<!-- ! --------! -->
+{% block content %}
+
+<div class="mt-5 pt-3">
+    {% if messages %} {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %} {% endif %}
+</div>
+<ul class="nav nav-tabs justify-content-center">
+    <li class="nav-item">
+        <a class="nav-link " href="/profile/edit-profile/">General Profile Settings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link " aria-current="page" href="{% url 'general:changeavatar' %}">Change Avatar</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link " aria-current="page" href="{% url 'general:passwordreset' %}">Change Password</a>
+    </li>
+    {% if not banksetting.exists %}
+    <li class="nav-item">
+        <a class="nav-link " aria-current="page" href="{% url 'general:banksetting' %}">Bank Setting</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link" aria-current="page" href="{% url 'general:editbanksetting' %}">Edit Bank Setting</a>
+    </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'general:publicprofilesetting' %}">Subscription Settings</a>
+    </li>
+</ul>
+<div class="container mt-5">
+
+    <form method="POST" action="{% url  'general:publicprofilesettingdone' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="h3 mb-1" for="subscriptionPrice">Your Subscription Price in INR</label>
+            <input class="form-control form-control-lg mt-1" value="{{profile.Subscription_price}}" type="number" name="subprice" id="subscriptionPrice" placeholder="Your Subscription Charge">
+            <p class="mt-1 text-muted">Zocaya is made to promote supporters so we only make money when you do. We work on profit sharing model and charge 5% platform fee + 3% payment processing fees</p>
+        </div>
+        <button type="submit" class="btn btn-outline-info">Set</button>
+    </form>
+
+
+
+    <form class="mt-5" action="{% url 'general:publicprofilesetting' %}" method="POST">
+        {% csrf_token %}
+        <h3>Describe Why Your Followers Should Subscribe You In Bullet Points</h3>
+        <p>You can tell about the benefits they get and what type of content you are uploading for subscribed users</p>
+        <div id="bulletPoints" class="form-group">
+            <textarea class="form-control" name="bpoints" placeholder="Your Subscription Charge" id="count" rows="20">{{profile.Why_to_subscribe|safe}}</textarea>
+        </div>
+        <button type="submit" class="btn  btn-outline-info">Submit</button>
+    </form>
+</div>
+{% endblock content %} {% block script %}
+
+<!-- <script type="text/javascript">
+    var bullet_points = document.getElementById('bulletPoints')
+    var trackCounter = document.getElementById('count')
+    var counter = 1
+    console.log(trackCounter.value)
+
+    addpoint_btn.addEventListener('click', function() {
+        counter += 1
+        bullet_points.innerHTML += `<input class="form-control form-control-lg mt-1"  name="point${counter}" type="text" id="subscriptionPrice${counter}" placeholder="Your Subscription Charge">`
+        trackCounter.value = String(counter);
+        console.log(trackCounter.value)
+
+    });
+    deletepoint_btn.addEventListener('click', function() {
+        let element = document.getElementById(`subscriptionPrice${counter}`)
+
+        if (counter == 0) {
+            alert("All Have Been Removed")
+            return
+        }
+        counter -= 1
+        element.remove()
+        trackCounter.value = String(counter);
+        console.log(trackCounter.value)
+
+
+    })
+</script>  -->
+
+
+<script src="https://cdn.ckeditor.com/ckeditor5/25.0.0/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor.create(document.querySelector('#count'), {
+            removePlugins: ['ImageUpload', 'MediaEmbed']
+        })
+        .catch(error => {
+            console.log(error);
+        });
+</script>
+{% endblock script %}

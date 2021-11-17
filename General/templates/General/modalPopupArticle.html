@@ -1,0 +1,96 @@
+<div class="modal fade" style="z-index: 20030;" id="modal{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">{{article.Headline}}</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <img id="modal{{forloop.counter}}Article" data-src="{{article.Feature_Image}}"   width="auto" class="image-fluid" alt="">
+                <div>
+                    {{article.Content|safe}}
+                </div>
+
+
+                <footer class="blockquote-footer ">Author <cite title="Source Title ">{{profile.username}}</cite></footer>
+                <!-- !------------------------ -->
+
+
+                {% if article.Id.hex in post_ids %}
+
+                <svg id="like{{forloop.counter}}" onclick="Like_me('{{article.Id.hex}}','article','{{article.Owner.username}}','like{{forloop.counter}}')" class="ico liked" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"></path>
+                      </svg>
+
+                <span class="text-muted" style="margin-left: 5px;" id="count{{article.Id.hex}}">{{article.Like_count}}</span> {% else %}
+                <svg id="like{{forloop.counter}}" onclick="Like_me('{{article.Id.hex}}','article','{{article.Owner.username}}','like{{forloop.counter}}')" class="ico" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"></path>
+                  </svg>
+
+
+                <span class="text-muted" style="margin-left: 5px;" id="count{{article.Id.hex}}"> {{article.Like_count}} </span> {% endif %}
+
+                <!-- !=--------------------------- -->
+                <div class=" mt-3 ">
+
+                    <button class="btn btn-sm btn-outline-secondary" onClick="copy( 'p{{forloop.counter}}')">
+                        Share This Post
+                    </button>
+                    <p class="text-secondary mt-3 " id="p{{forloop.counter}}" style="font-size: 0px;" onClick='copyText(this)'>
+                        http://zocaya.com/post/{{profile.username}}/articles/{{article.Id}}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% block script %}
+<script>
+    function loadImage(id) {
+        console.log("In Laad Image ")
+        var src = document.getElementById(id).dataset.src
+        console.log(src)
+        document.getElementById(id).src = src
+    }
+    // COPY TO CLIPBOARD
+    // Attempts to use .execCommand('copy') on a created text field
+    // Falls back to a selectable alert if not supported
+    // Attempts to display status in Bootstrap tooltip
+    // ------------------------------------------------------------------------------
+    function copy(id) {
+        document.getElementById(id).click()
+    }
+
+    function copyText(element) {
+        var range, selection, worked;
+
+        if (document.body.createTextRange) {
+            range = document.body.createTextRange();
+            range.moveToElementText(element);
+            range.select();
+        } else if (window.getSelection) {
+            selection = window.getSelection();
+            range = document.createRange();
+            range.selectNodeContents(element);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+
+        try {
+            document.execCommand('copy');
+            alert('share link copied');
+        } catch (err) {
+            alert('unable to copy text');
+        }
+    }
+</script>
+{% endblock script %}
+
+
+
+<!-- !------------------ -->
